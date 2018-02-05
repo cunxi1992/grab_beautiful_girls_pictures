@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 import os
 import time
 
+# 程序运行开始提示
+print("程序于 {} 开始启动，请等待...".format(time.ctime()))
 # 美女图片类型列表
 girls_images_type = ['xinggan','qingchun','xiaohua','chemo','qipao','mingxing']
 
@@ -77,7 +79,7 @@ def save_images(atlas_url):
     # 共有多少个图集
     length = len(atlas_url)
     # 已下载图集
-    count = 0
+    count = 1
     for url in atlas_url:
         # 调用函数，创建图集链接的soup对象
         soup = creat_soup(url)
@@ -90,11 +92,11 @@ def save_images(atlas_url):
         # 当前图集 共多少张图片,span的内容结构是共XX页，XX为当前图片的张数
         images_number = int(soup.find('span',class_ = 'page-ch').string[1:-1])
         # 当前图集的编号，如图集链接 http://www.mm131.com/qingchun/3039.html，编号为3039，用于拼接当前图集的图片地址
-        number = url.replace('.','/').split('/')[-2]
+        pic_number = url.replace('.','/').split('/')[-2]
         # 创建列表，用于保存每一张图片的链接
         images_url = []
         for number in range(1,images_number+1):
-            images_url.append('http://img1.mm131.me/pic/' + str(number) + '/'+ str(number) +'.jpg')
+            images_url.append('http://img1.mm131.me/pic/' + pic_number + '/'+ str(number) +'.jpg')
         # 有些网站会有防盗链，原理是检查 HTTP的referer头，如果没有referer，会抓取不了数据
         headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36','referer':"http://www.mm131.com/xinggan/530.html"}
         # 开始下载提示，等待2秒后开始下载
