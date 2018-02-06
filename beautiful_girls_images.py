@@ -6,8 +6,9 @@ import time
 
 # 程序运行开始提示
 print("程序于 {} 开始启动，请等待...".format(time.ctime()))
-# 美女图片类型列表
-girls_images_type = ['xinggan','qingchun','xiaohua','chemo','qipao','mingxing']
+# 美女图片类型和对应的页面序列位置，图片类型为键，位置为 值
+# 这个位置用于图集的链接，如list_6_3.html，6即为性感美女的序列位置
+girls_images_type = {'xinggan':'6','qingchun':'1','xiaohua':'2','chemo':'3','qipao':'4','mingxing':'5'}
 
 # 创建soup对象
 def creat_soup(url):
@@ -22,7 +23,7 @@ def creat_soup(url):
     # 使用解码后的数据创建一个soup对象，指定HTML解析器为Python默认的html.parser
     return BeautifulSoup(response.text,'html.parser')
 
-def pages_url(image_type):
+def pages_url(image_type,position):
     '''
     该函数用于获取某一个图片类型的全部页面的链接
     :param image_type:美女图片的类型，只有6种，是一个列表
@@ -41,9 +42,9 @@ def pages_url(image_type):
 
     # 用于存储每一页的页面链接，默认存储第一页的页面链接
     pages_url = [url]
-    # 将当前图片类型的每一页的链接存储起来，从第二页开始链接后跟list_1_2.html
+    # 将当前图片类型的每一页的链接存储起来，从第二页开始链接后跟list_position_页码.html
     for page in range(2,pages_num + 1):
-        pages_url.append(url + '/list_1_'+ str(page) + '.html')
+        pages_url.append(url + '/list_' + position + '_'+ str(page) + '.html')
 
     # 函数返回某一个图片类型的全部页面链接
     return pages_url
@@ -116,9 +117,9 @@ def save_images(atlas_url):
     print("当前图集图片已下载完成\n")
 
 
-# 获取某一图片类型的所有页面链接，可以使用循环遍历列表 girls_images_type，获取所有的图片类型的所有页面链接，
+# 获取某一图片类型的所有页面链接，可以使用循环遍历字典 girls_images_type，获取所有的图片类型的所有页面链接，
 # 那样运行时间太长，这里为了演示，只取其中一个图片类型
-pages_url = pages_url('qingchun')
+pages_url = pages_url('qingchun','1')
 
 # 获取页面的所有图集链接
 atlas_url = atlas(pages_url)
